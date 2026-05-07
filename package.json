@@ -1,0 +1,26 @@
+{
+  "name": "clean-handbook-game",
+  "version": "1.0.0",
+  "description": "边界与选择·清风代码 - 廉洁主题交互游戏",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "廉洁",
+    "教育",
+    "游戏",
+    "AI",
+    "机器学习"
+  ],
+  "author": "清风代码团队",
+  "license": "MIT"
+}

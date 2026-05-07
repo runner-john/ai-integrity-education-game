@@ -1,0 +1,5285 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-deep: #0f172a;
+    --bg-deepest: #020617;
+    --panel: rgba(30, 41, 59, 0.7);
+    --gold: #d97706;
+    --gold-light: #fbbf24;
+    --jade: #059669;
+    --jade-light: #10b981;
+    --jade-soft: #6ee7b7;
+    --cinnabar: #dc2626;
+    --cinnabar-light: #ef4444;
+    --ink: #e2e8f0;
+    --ink-dark: #94a3b8;
+    --seal: #b91c1c;
+    --primary: #1a5c45;
+    --primary-light: #2d8a6e;
+    --primary-dark: #0f3d2d;
+    --accent: #c9a962;
+    --accent-light: #e0c989;
+    --bg-dark: #0a1219;
+    --bg-medium: #141e28;
+    --bg-card: #1a2632;
+    --text-light: #e8e6e3;
+    --text-muted: #8a9aaa;
+    --red: #c9463d;
+    --red-light: #e05a52;
+    --border: rgba(45, 138, 110, 0.2);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --safe-zone: rgba(5, 150, 105, 0.03);
+    --danger-zone: rgba(220, 38, 38, 0.04);
+    --lotus-white: rgba(255, 255, 255, 0.9);
+    --lotus-pale: rgba(200, 230, 220, 0.7);
+}
+
+body {
+    font-family: "Noto Serif SC", "思源宋体", "华文楷体", Georgia, serif;
+    min-height: 100vh;
+    color: var(--ink);
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0a1628 0%, #1a3a2f 25%, #0f1f1d 50%, #2a4a3a 75%, #081018 100%);
+    background-size: 400% 400%;
+    animation: fluidGradient 20s ease-in-out infinite;
+    z-index: -2;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 40% 80%, rgba(52, 211, 153, 0.04) 0%, transparent 45%);
+    animation: breathe 8s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes fluidGradient {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 50% 100%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 50% 0%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes breathe {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+button, select, .label, .nav-link {
+    font-family: "ZCOOL XiaoWei", "站酷小薇", "PingFang SC", sans-serif;
+    letter-spacing: 1px;
+}
+
+.comment-box, .ai-quote {
+    font-family: "Ma Shan Zheng", "钟齐流江毛笔草书", cursive;
+    font-size: 18px;
+    line-height: 2;
+}
+
+.ripple {
+    position: fixed;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, rgba(16, 185, 129, 0.2) 40%, transparent 70%);
+    pointer-events: none;
+    transform: scale(0);
+    animation: rippleEffect 1.2s ease-out;
+    z-index: 9999;
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(15, 23, 42, 0.3);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s ease;
+}
+
+.navbar.scrolled {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(45, 138, 110, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.navbar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--jade-light), var(--jade), var(--jade-light), transparent);
+    animation: borderGlow 3s ease-in-out infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.navbar.scrolled::after {
+    opacity: 1;
+}
+
+@keyframes borderGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.nav-logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--jade-light);
+    font-family: "ZCOOL XiaoWei";
+    text-shadow: 0 0 20px rgba(5, 150, 105, 0.4);
+    letter-spacing: 2px;
+    position: relative;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 8px 20px;
+    border-radius: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.nav-link:hover::before,
+.nav-link.active::before {
+    left: 100%;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--jade-light);
+    border-color: rgba(45, 138, 110, 0.5);
+    background: rgba(5, 150, 105, 0.1);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+}
+
+.hero {
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(22, 101, 52, 0.9) 25%, rgba(15, 23, 42, 0.95) 50%, rgba(22, 101, 52, 0.85) 75%, rgba(15, 23, 42, 0.98) 100%);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(ellipse at 20% 30%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(220, 38, 38, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero .parallax-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom, #0f172a 0%, #020617 100%);
+}
+
+.parallax-content {
+    text-align: center;
+    z-index: 5;
+    position: relative;
+    padding: 40px;
+}
+
+/* 装饰性国风元素 */
+.decorative-element {
+    position: absolute;
+    font-size: 60px;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 1;
+    animation: float 6s ease-in-out infinite;
+}
+
+.decor-lotus {
+    font-size: 80px;
+    opacity: 0.12;
+    filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.3));
+}
+
+.lotus-left {
+    left: 10%;
+    top: 20%;
+    animation-delay: 0s;
+}
+
+.lotus-right {
+    right: 10%;
+    top: 30%;
+    animation-delay: 2s;
+}
+
+.decor-cloud {
+    font-size: 50px;
+    opacity: 0.08;
+}
+
+.cloud-top {
+    left: 5%;
+    top: 10%;
+    animation-delay: 1s;
+}
+
+.cloud-bottom {
+    right: 8%;
+    bottom: 15%;
+    animation-delay: 3s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+.hero-title {
+    font-family: "ZCOOL XiaoWei";
+    font-size: 56px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #86efac 25%, #4ade80 50%, #22c55e 75%, #16a34a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    letter-spacing: 10px;
+    position: relative;
+    filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.4));
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.3)); }
+    50% { filter: drop-shadow(0 0 50px rgba(74, 222, 128, 0.6)); }
+}
+
+.hero-title::before,
+.hero-title::after {
+    content: '『';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    background: none;
+    -webkit-text-fill-color: var(--jade);
+    opacity: 0.3;
+    letter-spacing: 0;
+}
+
+.hero-title::before {
+    left: -50px;
+    content: '『';
+}
+
+.hero-title::after {
+    right: -50px;
+    content: '』';
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    margin-bottom: 20px;
+    letter-spacing: 12px;
+}
+
+.hero-desc {
+    font-size: 1.1rem;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    line-height: 1.9;
+}
+
+.hero-features {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.feature-item {
+    padding: 12px 25px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-3px);
+    border-color: rgba(45, 138, 110, 0.4);
+    background: rgba(30, 41, 59, 0.8);
+}
+
+.feature-icon {
+    font-size: 1.4rem;
+}
+
+.btn-hero {
+    padding: 15px 45px;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--jade) 0%, #047857 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-family: "ZCOOL XiaoWei";
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(0deg); }
+    100% { transform: translateX(200%) rotate(0deg); }
+}
+
+.btn-hero:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(5, 150, 105, 0.5);
+}
+
+.btn-nav {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(139, 92, 246, 0.2));
+    color: #c4b5fd;
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.btn-nav:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(139, 92, 246, 0.3));
+    border-color: rgba(168, 85, 247, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(168, 85, 247, 0.3);
+}
+
+/* 游戏底部控制栏 */
+.game-bottom-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    padding: 15px 20px;
+    margin-top: 15px;
+    justify-content: space-between;
+    width: 100%;
+    grid-area: controls;
+}
+
+.game-bottom-bar-left {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.game-bottom-bar-center {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.game-bottom-bar-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.game-bottom-bar .map-select,
+.game-bottom-bar .speed-select {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.game-bottom-bar .select-label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+.game-bottom-bar .map-buttons,
+.game-bottom-bar .speed-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.game-bottom-bar .game-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.game-bottom-bar .mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* AI导师入口 */
+.ai-mentor-entry {
+    margin-left: auto;
+}
+
+/* 模式说明 */
+.mode-description {
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    grid-area: speed-control;
+    text-align: center;
+}
+
+.mode-description p {
+    margin: 0;
+}
+
+/* 难度选择器 */
+.difficulty-selector {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #64748b;
+    animation: bounce 2s infinite;
+    font-family: "Noto Serif SC";
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+}
+
+.intro-section {
+    padding: 80px 40px;
+}
+
+.story-section {
+    padding: 80px 40px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(22, 101, 52, 0.9) 25%, rgba(15, 23, 42, 0.95) 50%, rgba(22, 101, 52, 0.88) 75%, rgba(15, 23, 42, 0.98) 100%);
+    position: relative;
+}
+
+.story-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(74, 222, 128, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(22, 163, 74, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.about-section {
+    padding: 80px 40px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    color: var(--ink);
+    margin-bottom: 12px;
+    font-family: "ZCOOL XiaoWei";
+    background: linear-gradient(135deg, #e2e8f0, #86efac);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+.section-header h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--jade-light), transparent);
+}
+
+.section-header p {
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+.intro-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.intro-card {
+    margin-bottom: 30px;
+    padding: 35px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.intro-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--jade-light), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.intro-card:hover::before {
+    opacity: 1;
+}
+
+.intro-card:hover {
+    transform: translateY(-8px) rotateX(2deg);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(34, 197, 94, 0.1);
+    border-color: rgba(45, 138, 110, 0.4);
+    background: rgba(30, 41, 59, 0.7);
+}
+
+.intro-card h3 {
+    color: var(--jade-light);
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    font-family: "ZCOOL XiaoWei";
+    position: relative;
+    display: inline-block;
+}
+
+.intro-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--jade), var(--jade-light));
+    transition: width 0.4s ease;
+}
+
+.intro-card:hover h3::after {
+    width: 100%;
+}
+
+.intro-card p {
+    color: #94a3b8;
+    line-height: 1.9;
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.story-card {
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(20, 30, 40, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+    position: relative;
+    overflow: hidden;
+}
+
+.story-card::before {
+    content: '📜';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 40px;
+    opacity: 0.08;
+    transform: rotate(20deg);
+}
+
+.story-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--jade-light), var(--jade), var(--jade-light), transparent);
+    opacity: 0.5;
+}
+
+.story-card:hover {
+    border-color: rgba(45, 138, 110, 0.4);
+    transform: translateY(-6px) rotateX(1deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 25px rgba(34, 197, 94, 0.1);
+}
+
+.story-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.story-era {
+    padding: 4px 12px;
+    background: rgba(5, 150, 105, 0.2);
+    border-radius: 20px;
+    color: var(--jade);
+    font-size: 0.85rem;
+    font-family: "ZCOOL XiaoWei";
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(5, 150, 105, 0.5); }
+}
+
+.story-card h3 {
+    color: var(--ink);
+    font-family: "ZCOOL XiaoWei";
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.story-content {
+    color: #94a3b8;
+    line-height: 1.9;
+    margin-bottom: 12px;
+}
+
+.story-Moral {
+    color: var(--jade);
+    font-size: 0.95rem;
+    font-style: italic;
+    font-family: "Ma Shan Zheng";
+}
+
+.game-section {
+    padding: 20px 10px;
+    width: 100%;
+}
+
+/* 全屏模式下页面内容完全填充 */
+:fullscreen .game-section,
+:-webkit-full-screen .game-section {
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* 响应式调整 - 小屏幕优化 */
+@media (max-width: 1200px) {
+    .game-area {
+        grid-template-columns: 160px 1fr 160px;
+    }
+}
+
+@media (max-width: 900px) {
+    .game-area {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "game-info"
+            "ai-panel"
+            "canvas"
+            "task-panel"
+            "word-cloud"
+            "controls"
+            "speed-control";
+    }
+    
+    .canvas-wrapper {
+        min-height: 280px;
+    }
+}
+
+.game-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 10px;
+}
+
+/* 全屏模式下的容器样式 */
+:fullscreen .game-container,
+:-webkit-full-screen .game-container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.game-area {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        "left right"
+        "controls controls"
+        "speed-control speed-control";
+    gap: 15px;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    border: 1px solid rgba(45, 138, 110, 0.25);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    min-height: 650px;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.game-left {
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.game-right {
+    grid-area: right;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* 全屏模式 - 更新为两栏布局 */
+.game-area.is-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    border-radius: 0 !important;
+    z-index: 9999 !important;
+    grid-template-columns: minmax(600px, 1fr) 400px !important;
+    grid-template-rows: auto !important;
+    grid-template-areas: "left right" !important;
+    gap: 20px !important;
+    overflow: hidden !important;
+}
+
+.game-area.is-fullscreen .game-left {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    height: calc(100vh - 40px) !important;
+    overflow-y: auto !important;
+}
+
+.game-area.is-fullscreen .game-right {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    height: calc(100vh - 40px) !important;
+    overflow-y: auto !important;
+    width: 400px !important;
+}
+
+.game-area.is-fullscreen .game-right > .glass {
+    grid-area: unset !important;
+    position: static !important;
+    background: rgba(30, 41, 59, 0.85) !important;
+    border: 1px solid rgba(45, 138, 110, 0.25) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+}
+
+.game-area.is-fullscreen canvas {
+    max-height: 55vh !important;
+    max-width: 100% !important;
+}
+
+.game-area.is-fullscreen .canvas-wrapper {
+    min-height: 55vh !important;
+}
+
+.game-area.is-fullscreen .ai-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    order: unset !important;
+    position: static !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.game-area.is-fullscreen .ai-logs {
+    max-height: 150px !important;
+    overflow-y: auto !important;
+}
+
+/* 全屏模式下隐藏导航栏 */
+body:has(.game-area.is-fullscreen) .navbar {
+    display: none !important;
+}
+
+/* 全屏模式下背景 */
+body:has(.game-area.is-fullscreen) {
+    background: linear-gradient(135deg, #0a1628 0%, #1a3a2f 50%, #081018 100%) !important;
+}
+
+/* 兼容不同浏览器的全屏API */
+:fullscreen .game-area,
+:-webkit-full-screen .game-area {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    padding: 20px !important;
+    border-radius: 0 !important;
+}
+
+:fullscreen .game-area canvas,
+:-webkit-full-screen .game-area canvas {
+    max-height: 50vh !important;
+}
+
+
+
+
+
+.danger-hint {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(220, 38, 38, 0.15);
+    border: 1px solid var(--cinnabar);
+    color: #fca5a5;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    text-align: center;
+    animation: pulse-danger 1.5s infinite;
+    display: none;
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+}
+
+.danger-hint.show {
+    display: block;
+}
+
+@keyframes pulse-danger {
+    0%, 100% { opacity: 1; box-shadow: 0 0 15px rgba(220, 38, 38, 0.2); }
+    50% { opacity: 0.8; box-shadow: 0 0 20px rgba(220, 38, 38, 0.4); }
+}
+
+.game-info {
+    grid-area: game-info;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.info-item {
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    border-left: 3px solid var(--jade);
+}
+
+.info-item .label {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+.info-item .value {
+    font-size: 0.9rem;
+    color: #e2e8f0;
+}
+
+.task-panel {
+    grid-area: task-panel;
+    padding: 10px;
+    background: rgba(30, 41, 59, 0.85);
+    border-radius: 8px;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    max-height: 180px;
+    overflow-y: auto;
+    font-size: 0.8rem;
+}
+
+.task-panel .tasks-header {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4ade80;
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 0;
+    font-size: 0.7rem;
+}
+
+.ai-decision-panel {
+    grid-area: ai-panel;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(30, 41, 59, 0.85);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    font-size: 0.8rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.ai-decision-panel .panel-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fbbf24;
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.ai-decision-panel .ai-status {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ai-decision-panel .status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ai-decision-panel .status-label {
+    font-size: 0.65rem;
+    color: #94a3b8;
+}
+
+.ai-decision-panel .status-value {
+    font-size: 0.75rem;
+    color: #fbbf24;
+}
+
+.ai-decision-panel .risk-bar {
+    background: linear-gradient(90deg, #059669, #f59e0b, #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.controls .btn {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+}
+
+.speed-control {
+    grid-area: speed-control;
+    margin-top: 0;
+    padding: 15px;
+    text-align: center;
+}
+
+.speed-label {
+    color: #e2e8f0;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.speed-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 3px;
+}
+
+.speed-btn {
+    padding: 5px 8px;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    background: rgba(30, 41, 59, 0.6);
+    color: #cbd5e1;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.7rem;
+    transition: all 0.3s ease;
+}
+
+.speed-btn:hover {
+    border-color: rgba(74, 222, 128, 0.6);
+    background: rgba(5, 150, 105, 0.2);
+}
+
+.speed-btn.active {
+    border-color: var(--jade);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.4), rgba(34, 197, 94, 0.2));
+    color: var(--jade-light);
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+}
+
+.map-btn {
+    padding: 8px 16px;
+    border: 2px solid rgba(74, 222, 128, 0.3);
+    background: rgba(30, 41, 59, 0.8);
+    color: #cbd5e1;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    min-width: 50px;
+    margin: 0 4px;
+}
+
+.map-btn:hover {
+    border-color: rgba(74, 222, 128, 0.6);
+    background: rgba(5, 150, 105, 0.25);
+    transform: translateY(-2px);
+}
+
+.map-btn.active {
+    border-color: var(--jade);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.5), rgba(34, 197, 94, 0.3));
+    color: var(--jade-light);
+    box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
+    transform: translateY(-2px);
+}
+
+.mode-btn {
+    padding: 8px 20px;
+    border: 2px solid rgba(74, 222, 128, 0.3);
+    background: rgba(30, 41, 59, 0.8);
+    color: #cbd5e1;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    margin: 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mode-btn:hover {
+    border-color: rgba(74, 222, 128, 0.6);
+    background: rgba(5, 150, 105, 0.25);
+    transform: translateY(-2px);
+}
+
+.mode-btn.active {
+    border-color: var(--jade);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.5), rgba(34, 197, 94, 0.3));
+    color: var(--jade-light);
+    box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-mentor {
+    padding: 10px 24px;
+    border: 2px solid rgba(168, 85, 247, 0.5);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.1));
+    color: #c4b5fd;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.btn-mentor:hover {
+    border-color: rgba(168, 85, 247, 0.8);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(168, 85, 247, 0.2));
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+    transform: translateY(-2px);
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+    }
+}
+
+.mode-description {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    text-align: center;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    background: rgba(30, 41, 59, 0.95);
+}
+
+.speed-display {
+    color: #94a3b8;
+    font-size: 0.65rem;
+    margin-top: 2px;
+    font-family: "Noto Serif SC";
+}
+
+.canvas-wrapper {
+    grid-area: canvas;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: visible;
+    min-height: 350px;
+}
+
+.fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(74, 222, 128, 0.4);
+    color: #86efac;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.95rem;
+    z-index: 50;
+    transition: all 0.3s ease;
+}
+
+.fullscreen-btn:hover {
+    background: rgba(5, 150, 105, 0.4);
+    border-color: rgba(74, 222, 128, 0.8);
+    transform: scale(1.05);
+}
+
+.word-cloud {
+    grid-area: word-cloud;
+    padding: 10px;
+}
+
+.controls {
+    grid-area: controls;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 15px 0;
+}
+
+.controls .btn {
+    padding: 16px 32px;
+    font-size: 1rem;
+    min-width: 110px;
+}
+
+canvas {
+    border: 2px solid #334155;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.3);
+    max-width: 100%;
+    height: auto;
+}
+
+.info-item {
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-left: 3px solid var(--jade);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(5, 150, 105, 0.05) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.info-item:hover::before {
+    opacity: 1;
+}
+
+.info-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.info-item.danger {
+    border-left-color: var(--cinnabar);
+    animation: dangerPulse 2s ease-in-out infinite;
+}
+
+@keyframes dangerPulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(220, 38, 38, 0); }
+    50% { box-shadow: 0 0 15px rgba(220, 38, 38, 0.3); }
+}
+
+.info-item .label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.info-item .value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ink);
+    font-family: "ZCOOL XiaoWei";
+}
+
+/* 风险评分特殊样式 */
+.info-item.risk-item {
+    border-left-color: var(--cinnabar);
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), rgba(15, 23, 42, 0.8));
+}
+
+.info-item.risk-item .value {
+    color: #fca5a5;
+    text-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
+}
+
+/* 行为模式特殊样式 */
+.info-item.behavior-item {
+    border-left-color: var(--jade-light);
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(15, 23, 42, 0.8));
+}
+
+.info-item.behavior-item .value {
+    color: #86efac;
+    font-size: 1.3rem;
+}
+
+.cloud-title {
+    font-size: 0.95rem;
+    color: var(--jade);
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.cloud-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cloud-word {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(45, 138, 110, 0.15);
+    border: 1px solid rgba(45, 138, 110, 0.3);
+    color: var(--primary-light);
+    transition: all 0.3s ease;
+}
+
+.cloud-word.collected {
+    background: var(--primary);
+    border-color: var(--primary-light);
+    color: var(--text-light);
+    animation: collectPop 0.4s ease-out;
+}
+
+@keyframes collectPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.lotus-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.integrity-bar {
+    margin-top: 18px;
+}
+
+.integrity-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.btn {
+    padding: 12px 28px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: "ZCOOL XiaoWei";
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--jade) 0%, #047857 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(90deg, var(--jade), var(--jade-light), var(--jade));
+    background-size: 200% 100%;
+    border-radius: 27px;
+    z-index: -1;
+    animation: flowBorder 3s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.btn-primary:hover::before {
+    opacity: 1;
+}
+
+@keyframes flowBorder {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.btn-secondary {
+    background: rgba(30, 41, 59, 0.8);
+    color: var(--ink);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(45, 55, 72, 0.9);
+    border-color: rgba(45, 138, 110, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+    transform: scale(0.98);
+}
+
+.btn-info {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+}
+
+.btn-info:hover {
+    background: var(--gold);
+    color: white;
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-info:active {
+    transform: scale(0.98);
+}
+
+.flow-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.btn-map {
+    background: transparent;
+    border: 1px solid #64748b;
+    color: #94a3b8;
+}
+
+.btn-map:hover {
+    background: #334155;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-map:active {
+    transform: scale(0.98);
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.map-selector {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(20, 30, 40, 0.98) 50%, rgba(15, 23, 42, 0.98) 100%);
+    padding: 40px 50px;
+    border-radius: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 60px rgba(34, 197, 94, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    z-index: 300;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    overflow: hidden;
+}
+
+.map-selector::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--jade-light), var(--jade), var(--jade-light), transparent);
+    animation: borderGlow 2.5s ease-in-out infinite;
+}
+
+.map-selector::after {
+    content: '🪷';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.5));
+}
+
+.map-selector.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.map-selector h3 {
+    color: var(--ink);
+    margin-bottom: 30px;
+    text-align: center;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 1.4rem;
+    position: relative;
+    background: linear-gradient(135deg, #e2e8f0, #86efac, #6ee7b7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.3));
+}
+
+.map-selector h3::before,
+.map-selector h3::after {
+    content: '──';
+    color: rgba(34, 197, 94, 0.3);
+    margin: 0 15px;
+}
+
+.map-options {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.map-option {
+    padding: 25px 30px;
+    border: 2px solid rgba(34, 197, 94, 0.2);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(20, 30, 40, 0.9) 100%);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: center;
+    transform-style: preserve-3d;
+    position: relative;
+    overflow: hidden;
+    min-width: 140px;
+}
+
+.map-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.15), transparent);
+    transition: left 0.6s ease;
+}
+
+.map-option:hover::before {
+    left: 100%;
+}
+
+.map-option:hover {
+    border-color: var(--jade-light);
+    transform: translateY(-8px) rotateX(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(34, 197, 94, 0.2);
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(34, 197, 94, 0.1) 100%);
+}
+
+.map-option.selected {
+    border-color: var(--jade-light);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.25) 0%, rgba(45, 138, 110, 0.15) 100%);
+    box-shadow: 0 0 40px rgba(34, 197, 94, 0.4), inset 0 0 20px rgba(34, 197, 94, 0.1);
+    transform: translateY(-4px);
+}
+
+.map-option.selected::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, var(--jade), var(--jade-light), var(--jade));
+    background-size: 200% 200%;
+    border-radius: 16px;
+    animation: gradientBorder 3s ease infinite;
+    z-index: -1;
+    opacity: 0.7;
+}
+
+@keyframes gradientBorder {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.map-option .size-name {
+    font-size: 1.3rem;
+    color: var(--ink);
+    font-weight: 700;
+    font-family: "ZCOOL XiaoWei";
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+}
+
+.map-option .size-name::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--jade), var(--jade-light));
+    transition: width 0.4s ease;
+}
+
+.map-option:hover .size-name::after,
+.map-option.selected .size-name::after {
+    width: 100%;
+}
+
+.map-option .size-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: "Noto Serif SC";
+    letter-spacing: 0.5px;
+}
+
+.map-selector .btn-primary {
+    width: 100%;
+    padding: 16px 32px;
+    font-size: 1.1rem;
+    position: relative;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.map-selector .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+.game-rules {
+    padding: 30px;
+    margin-top: 30px;
+}
+
+.game-rules h3 {
+    color: var(--jade-light);
+    margin-bottom: 20px;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 1.3rem;
+}
+
+.rules-grid {
+    display: grid;
+    gap: 15px;
+}
+
+.rule-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(15, 23, 42, 0.4);
+}
+
+.rule-item:nth-child(even) {
+    background: rgba(30, 41, 59, 0.3);
+}
+
+.rule-item:hover {
+    background: rgba(45, 138, 110, 0.1);
+    transform: translateX(5px);
+}
+
+.rule-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.rule-color.clean {
+    background: #22c55e;
+    color: rgba(34, 197, 94, 0.5);
+}
+
+.rule-color.negative {
+    background: #ef4444;
+    color: rgba(239, 68, 68, 0.5);
+}
+
+.rule-color.food {
+    background: #f8fafc;
+    color: rgba(248, 250, 252, 0.5);
+}
+
+.rule-color.temptation {
+    background: #fbbf24;
+    color: rgba(251, 191, 36, 0.5);
+}
+
+.ai-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 20px;
+    border: 1px solid rgba(45, 138, 110, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(34, 197, 94, 0.1);
+    z-index: 400;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ai-panel.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.panel-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid rgba(45, 138, 110, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h3 {
+    color: var(--jade-light);
+    font-family: "ZCOOL XiaoWei";
+    font-size: 1.3rem;
+}
+
+.close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(220, 38, 38, 0.2);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    color: var(--cinnabar-light);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background: rgba(220, 38, 38, 0.4);
+    transform: rotate(90deg);
+}
+
+.chat-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chat-message {
+    padding: 12px 16px;
+    border-radius: 12px;
+    max-width: 80%;
+    animation: messageIn 0.3s ease-out;
+}
+
+@keyframes messageIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-message.user {
+    background: rgba(5, 150, 105, 0.2);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: var(--jade-light);
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.chat-message.ai {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--ink);
+    align-self: flex-start;
+}
+
+.input-area {
+    padding: 20px;
+    border-top: 1px solid rgba(45, 138, 110, 0.2);
+    display: flex;
+    gap: 12px;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 12px 18px;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(45, 138, 110, 0.3);
+    border-radius: 25px;
+    color: var(--ink);
+    font-size: 1rem;
+    font-family: "Noto Serif SC";
+    transition: all 0.3s ease;
+}
+
+.input-area input:focus {
+    outline: none;
+    border-color: var(--jade-light);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(2, 6, 23, 0.95);
+    z-index: 350;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.overlay-content {
+    padding: 40px 50px;
+    text-align: center;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 滚动条样式 */
+.overlay-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.overlay-content::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 4px;
+}
+
+.overlay-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--jade-light), var(--jade));
+    border-radius: 4px;
+}
+
+.overlay-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--jade), var(--jade-dark));
+}
+
+.overlay.active .overlay-content {
+    transform: scale(1);
+}
+
+.overlay-content h2 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    font-family: "ZCOOL XiaoWei";
+    background: linear-gradient(135deg, #f0fdf4, #86efac);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.overlay-content.win h2 {
+    background: linear-gradient(135deg, #86efac, #4ade80, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.overlay-content.lose h2 {
+    background: linear-gradient(135deg, #fecaca, #fca5a5, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.overlay-content p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.8;
+}
+
+.lotus-reveal {
+    font-size: 4rem;
+    margin: 20px 0;
+    animation: lotusBloom 1s ease-out;
+}
+
+@keyframes lotusBloom {
+    from { transform: scale(0) rotate(-180deg); opacity: 0; }
+    to { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.ai-comment {
+    padding: 20px;
+    background: rgba(5, 150, 105, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 12px;
+    margin: 20px 0;
+    color: var(--jade-soft);
+    font-family: "Ma Shan Zheng";
+    font-size: 1.2rem;
+    line-height: 1.9;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+}
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 15px 30px;
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 12px;
+    border: 1px solid rgba(45, 138, 110, 0.3);
+    color: var(--ink);
+    z-index: 500;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.success {
+    border-color: rgba(34, 197, 94, 0.4);
+    color: var(--jade-light);
+}
+
+.toast.warning {
+    border-color: rgba(251, 191, 36, 0.4);
+    color: var(--gold-light);
+}
+
+.toast.error {
+    border-color: rgba(239, 68, 68, 0.4);
+    color: var(--cinnabar-light);
+}
+
+/* ========== 词汇学习卡片 ========== */
+.word-card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 600;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.word-card-overlay.show {
+    display: flex;
+}
+
+.word-card {
+    width: 90%;
+    max-width: 500px;
+    border-radius: 16px;
+    overflow: hidden;
+    transform: scale(0.8);
+    opacity: 0;
+    animation: cardPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    border: 2px solid var(--jade-light);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(74, 222, 128, 0.2);
+}
+
+.word-card.negative {
+    border-color: var(--cinnabar-light);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(239, 68, 68, 0.2);
+}
+
+.word-card.rare {
+    border-color: var(--gold-light);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(251, 191, 36, 0.3);
+}
+
+@keyframes cardPopIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.word-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(16, 185, 129, 0.1));
+    border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.word-card.negative .word-card-header {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+    border-bottom-color: rgba(239, 68, 68, 0.2);
+}
+
+.word-card.rare .word-card-header {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(217, 119, 6, 0.1));
+    border-bottom-color: rgba(251, 191, 36, 0.3);
+}
+
+.word-card-type {
+    font-family: "Ma Shan Zheng", "Noto Serif SC", serif;
+    font-size: 18px;
+    color: var(--jade-light);
+    font-weight: bold;
+}
+
+.word-card.negative .word-card-type {
+    color: var(--cinnabar-light);
+}
+
+.word-card.rare .word-card-type {
+    color: var(--gold-light);
+}
+
+.word-card-close {
+    background: none;
+    border: none;
+    color: var(--ink-dark);
+    font-size: 24px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.word-card-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--ink);
+}
+
+.word-card-content {
+    padding: 30px;
+    text-align: center;
+}
+
+.word-card-word {
+    font-family: "Ma Shan Zheng", "Noto Serif SC", serif;
+    font-size: 42px;
+    color: var(--jade-light);
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+}
+
+.word-card.negative .word-card-word {
+    color: var(--cinnabar-light);
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.word-card.rare .word-card-word {
+    color: var(--gold-light);
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+}
+
+.word-card-meaning {
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border-left: 3px solid var(--jade-light);
+}
+
+.word-card.negative .word-card-meaning {
+    border-left-color: var(--cinnabar-light);
+}
+
+.word-card.rare .word-card-meaning {
+    border-left-color: var(--gold-light);
+}
+
+.word-card-quote {
+    font-family: "Ma Shan Zheng", "Noto Serif SC", serif;
+    font-size: 18px;
+    color: var(--ink-dark);
+    line-height: 1.8;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.05), rgba(16, 185, 129, 0.03));
+    border-radius: 10px;
+    border: 1px solid rgba(74, 222, 128, 0.1);
+}
+
+.word-card.negative .word-card-quote {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(220, 38, 38, 0.03));
+    border-color: rgba(239, 68, 68, 0.1);
+}
+
+.word-card.rare .word-card-quote {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), rgba(217, 119, 6, 0.03));
+    border-color: rgba(251, 191, 36, 0.15);
+}
+
+.word-card-footer {
+    padding: 15px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.word-card-hint {
+    font-size: 14px;
+    color: var(--ink-dark);
+}
+
+/* ========== 关于页面 ========== */
+.about-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.about-content .about-card {
+    margin-bottom: 20px;
+    padding: 35px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.about-content .about-card:hover {
+    transform: translateY(-6px) rotateX(2deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 25px rgba(34, 197, 94, 0.1);
+    border-color: rgba(45, 138, 110, 0.4);
+}
+
+.about-content .about-card h3 {
+    color: var(--jade-light);
+    margin-bottom: 15px;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 1.4rem;
+}
+
+.about-content .about-card p,
+.about-content .about-card li {
+    color: #94a3b8;
+    line-height: 1.8;
+}
+
+.about-content .about-card ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.about-content .about-card li {
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+}
+
+.about-content .about-card li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--jade);
+}
+
+.footer {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '🪷';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 80px;
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.footer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(180deg, transparent, rgba(10, 18, 25, 0.8));
+    pointer-events: none;
+}
+
+.footer p {
+    margin: 8px 0;
+    animation: footerFadeIn 1.5s ease-out;
+}
+
+@keyframes footerFadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.red-vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 80px 30px rgba(220, 38, 38, 0);
+    transition: box-shadow 0.5s ease;
+    border-radius: 12px;
+    z-index: 10;
+}
+
+.red-vignette.active {
+    box-shadow: inset 0 0 100px 40px rgba(220, 38, 38, 0.5);
+    animation: redPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes redPulse {
+    0%, 100% { box-shadow: inset 0 0 80px 30px rgba(220, 38, 38, 0.4); }
+    50% { box-shadow: inset 0 0 120px 50px rgba(220, 38, 38, 0.6); }
+}
+
+.achievement-badge {
+    display: inline-block;
+    font-size: 24px;
+    margin: 0 4px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: badgePulse 1s ease-in-out;
+}
+
+.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in.animate {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.fade-in.animate.show,
+.fade-in.animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.title-area {
+    text-align: center;
+    padding: 30px 0 40px;
+    position: relative;
+}
+
+.title-seal {
+    position: absolute;
+    top: 10px;
+    right: 15%;
+    width: 55px;
+    height: 55px;
+    border: 3px solid var(--seal);
+    border-radius: 4px;
+    color: var(--seal);
+    font-family: "ZCOOL XiaoWei";
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(12deg);
+    opacity: 0.9;
+    text-shadow: 0 0 10px rgba(185, 28, 28, 0.3);
+    box-shadow: inset 0 0 15px rgba(185, 28, 28, 0.15), 0 0 20px rgba(185, 28, 28, 0.2);
+}
+
+.minigame-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(8px);
+}
+
+.minigame-content {
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.minigame-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.minigame-header h2 {
+    font-family: "ZCOOL XiaoWei";
+    color: var(--jade-light);
+    font-size: 1.8rem;
+}
+
+.minigame-instructions {
+    text-align: center;
+    color: var(--ink-dark);
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.minigame-controls {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.memory-game-info,
+.link-game-info {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.memory-game-info strong,
+.link-game-info strong {
+    color: var(--jade-light);
+}
+
+.memory-game-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    cursor: pointer;
+    perspective: 1000px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.memory-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-family: "ZCOOL XiaoWei";
+    padding: 8px;
+}
+
+.card-front {
+    background: linear-gradient(135deg, #1e3a2f, #0f1f1d);
+    border: 2px solid rgba(74, 222, 128, 0.3);
+    color: var(--jade-light);
+    font-size: 1.5rem;
+}
+
+.card-back.clean {
+    background: linear-gradient(135deg, #059669, #10b981);
+    border: 2px solid rgba(74, 222, 128, 0.5);
+    transform: rotateY(180deg);
+}
+
+.card-back.corrupt {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    border: 2px solid rgba(239, 68, 68, 0.5);
+    transform: rotateY(180deg);
+}
+
+.card-word {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.card-meaning {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+}
+
+.memory-card.matched .card-inner {
+    animation: matchPulse 0.5s ease;
+}
+
+@keyframes matchPulse {
+    0%, 100% { transform: rotateY(180deg) scale(1); }
+    50% { transform: rotateY(180deg) scale(1.1); }
+}
+
+.memory-win-overlay,
+.link-win-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+}
+
+.memory-win-content,
+.link-win-content {
+    text-align: center;
+    padding: 40px;
+}
+
+.win-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.link-game-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.link-tile {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 8px;
+    font-family: "ZCOOL XiaoWei";
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.link-tile.clean {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.3), rgba(16, 185, 129, 0.2));
+    border-color: rgba(74, 222, 128, 0.3);
+}
+
+.link-tile.corrupt {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.3), rgba(239, 68, 68, 0.2));
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.link-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.link-tile.selected {
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
+    border-color: var(--jade-light);
+}
+
+.link-tile.wrong {
+    animation: wrongShake 0.4s ease;
+    border-color: var(--cinnabar-light);
+}
+
+@keyframes wrongShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.link-tile.matched {
+    opacity: 0;
+    transform: scale(0);
+    pointer-events: none;
+}
+
+.tile-word {
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.tile-meaning {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+}
+
+.minigames-section {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.minigames-section .section-header h2 {
+    color: var(--jade-light);
+    font-family: "ZCOOL XiaoWei";
+    margin-bottom: 10px;
+}
+
+.minigames-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1000px;
+    margin: 40px auto 0;
+}
+
+.minigame-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+.minigame-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(74, 222, 128, 0.4);
+}
+
+.minigame-icon {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+}
+
+.minigame-card h3 {
+    font-family: "ZCOOL XiaoWei";
+    color: var(--jade-light);
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.minigame-card p {
+    color: var(--ink-dark);
+    line-height: 1.7;
+}
+
+.title-seal {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    background: rgba(239, 68, 68, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Ma Shan Zheng";
+    font-size: 1.8rem;
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    animation: sealFloat 3s ease-in-out infinite;
+}
+
+@keyframes sealFloat {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.btn-shimmer {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.hero-subtitle {
+    letter-spacing: 8px;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.hero-desc {
+    font-style: italic;
+    color: #94a3b8;
+    max-width: 600px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+.about-section {
+    padding: 60px 20px;
+}
+
+.about-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.about-team,
+.about-tech {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+}
+
+.about-team h3,
+.about-tech h3 {
+    color: #4ade80;
+    font-family: "ZCOOL XiaoWei";
+    margin-bottom: 20px;
+}
+
+.about-team p {
+    color: #e2e8f0;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.tech-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(74, 222, 128, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.tech-icon {
+    font-size: 1.5rem;
+}
+
+.game-shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.red-flash {
+    animation: redFlash 0.3s ease;
+}
+
+@keyframes redFlash {
+    0%, 100% { box-shadow: inset 0 0 0 0 rgba(239, 68, 68, 0); }
+    50% { box-shadow: inset 0 0 100px 50px rgba(239, 68, 68, 0.4); }
+}
+
+.integrity-breath {
+    position: relative;
+}
+
+.integrity-breath::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(74, 222, 128, 0.3) 0%, transparent 70%);
+    animation: breath 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes breath {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: scrollReveal 1.2s ease forwards;
+}
+
+@keyframes scrollReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.game-right::-webkit-scrollbar {
+    width: 6px;
+}
+
+.game-right::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 3px;
+}
+
+.game-right::-webkit-scrollbar-thumb {
+    background: rgba(74, 222, 128, 0.4);
+    border-radius: 3px;
+}
+
+.player-panel,
+.risk-panel,
+.ai-panel,
+.achieve-panel {
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.panel-title {
+    font-family: "ZCOOL XiaoWei";
+    color: #4ade80;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    background: rgba(74, 222, 128, 0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(74, 222, 128, 0.15);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.3rem;
+    color: #4ade80;
+    font-weight: bold;
+}
+
+.risk-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.risk-score-circle {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 3px solid #4ade80;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(34, 197, 94, 0.05));
+}
+
+.risk-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4ade80;
+}
+
+.risk-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.risk-features {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.feature-name {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.feature-bar {
+    height: 8px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.feature-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4ade80, #22c55e);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.risk-pattern {
+    text-align: center;
+    padding: 10px;
+    background: rgba(74, 222, 128, 0.1);
+    border-radius: 8px;
+    color: #4ade80;
+    font-family: "Ma Shan Zheng";
+    font-size: 1.1rem;
+}
+
+.ai-status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.ai-status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background: rgba(251, 191, 36, 0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.ai-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 5px;
+}
+
+.ai-value {
+    font-size: 0.95rem;
+    color: #fbbf24;
+    font-weight: bold;
+}
+
+.ai-log-panel {
+    margin-top: 10px;
+}
+
+.log-title {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-bottom: 8px;
+}
+
+.ai-logs {
+    max-height: 120px;
+    overflow-y: auto;
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.ml-prediction-panel {
+    margin-top: 10px;
+}
+
+.ml-predictions {
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 6px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.ai-logs::-webkit-scrollbar {
+    width: 4px;
+}
+
+.log-entry {
+    font-size: 0.8rem;
+    color: #e2e8f0;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.achieve-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.achieve-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background: rgba(74, 222, 128, 0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    transition: all 0.3s ease;
+}
+
+.achieve-item.locked {
+    background: rgba(148, 163, 184, 0.1);
+    border-color: rgba(148, 163, 184, 0.2);
+    opacity: 0.5;
+}
+
+.achieve-item.unlocked {
+    animation: achievePop 0.5s ease;
+}
+
+@keyframes achievePop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.achieve-icon {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.achieve-name {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-align: center;
+}
+
+@media (max-width: 1024px) {
+    .game-area {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-right {
+        max-height: none;
+        overflow-y: visible;
+    }
+}
+
+.title-main {
+    font-family: "ZCOOL XiaoWei";
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #f0fdf4, #86efac, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.3));
+}
+
+.title-sub {
+    font-size: 1.3rem;
+    color: #94a3b8;
+    font-family: "ZCOOL XiaoWei";
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+}
+
+.title-desc {
+    color: #64748b;
+    font-size: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+#particleCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#integrityDisplay {
+    position: relative;
+    display: inline-block;
+}
+
+#integrityDisplay::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(5, 150, 105, 0.4) 0%, rgba(5, 150, 105, 0.1) 40%, transparent 70%);
+    border-radius: 50%;
+    animation: breathe 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@media (max-width: 1200px) {
+    .game-area {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .game-info {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .canvas-wrapper {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .word-cloud {
+        grid-column: 1 / -1;
+        grid-row: 3;
+    }
+
+    .controls {
+        grid-column: 1 / -1;
+        grid-row: 4;
+    }
+}
+
+/* === 任务面板样式 === */
+.task-panel {
+    grid-row: 2;
+    grid-column: 1;
+    padding: 8px;
+    background: rgba(30, 41, 59, 0.85);
+    border-radius: 8px;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.task-panel .tasks-header {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4ade80;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.task-panel .task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.task-panel .task-item:last-child {
+    border-bottom: none;
+}
+
+.task-panel .task-item.completed {
+    opacity: 0.7;
+}
+
+.task-panel .task-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+    font-size: 0.75rem;
+}
+
+.task-panel .task-item.completed .task-icon {
+    background: rgba(74, 222, 128, 0.4);
+}
+
+.task-panel .task-name {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+}
+
+.task-panel .task-type {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+}
+
+.task-panel .task-reward {
+    font-size: 0.75rem;
+    color: #4ade80;
+}
+
+/* === 游戏弹窗样式 === */
+.game-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+}
+
+.game-modal .modal-content {
+    background: rgba(30, 41, 59, 0.98);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 16px;
+    margin: 20px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+}
+
+.game-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.3), rgba(34, 197, 94, 0.2));
+}
+
+.game-modal .modal-header .modal-title {
+    margin: 0;
+    color: #4ade80;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 1.3rem;
+}
+
+.game-modal .modal-header .modal-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0 10px;
+    line-height: 1;
+}
+
+.game-modal .modal-header .modal-close:hover {
+    color: #fff;
+}
+
+.game-modal .modal-body {
+    padding: 25px;
+    color: #e2e8f0;
+}
+
+.game-modal .modal-body h4 {
+    color: #4ade80;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.game-modal .modal-body h4:first-child {
+    margin-top: 0;
+}
+
+/* === 微教育模块样式 === */
+.quiz-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.3s ease;
+}
+
+.quiz-content {
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.quiz-question {
+    font-size: 1.2rem;
+    color: #e2e8f0;
+    margin-bottom: 20px;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quiz-option {
+    padding: 15px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quiz-option:hover {
+    background: rgba(74, 222, 128, 0.2);
+    border-color: rgba(74, 222, 128, 0.5);
+}
+
+.quiz-timer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #fbbf24;
+}
+
+.story-card-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 320px;
+    z-index: 100;
+    animation: slideIn 0.3s ease;
+}
+
+.story-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.story-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fbbf24;
+}
+
+.story-card-source {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.story-card-content {
+    font-size: 0.9rem;
+    color: #e2e8f0;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+.story-card-meaning {
+    font-size: 0.85rem;
+    color: #4ade80;
+}
+
+.warning-quote {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: #ef4444;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+    z-index: 100;
+    animation: fadeInOut 3s ease;
+    pointer-events: none;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+@media (max-width: 900px) {
+    .game-area {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto;
+        min-height: auto;
+        padding: 8px;
+    }
+
+    .game-info {
+        grid-column: 1;
+        grid-row: 1;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .info-item {
+        flex: 1;
+        min-width: 80px;
+        padding: 5px 8px;
+    }
+
+    .info-item .label {
+        font-size: 0.6rem;
+    }
+
+    .info-item .value {
+        font-size: 0.7rem;
+    }
+
+    .canvas-wrapper {
+        min-height: 300px;
+    }
+
+    .word-cloud, .ai-decision-panel, .task-panel {
+        max-height: 120px;
+        overflow-y: auto;
+    }
+
+    .controls {
+        gap: 8px;
+    }
+
+    .controls .btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+
+    .nav-links {
+        gap: 12px;
+    }
+
+    .nav-link {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .hero-title {
+        font-size: 36px;
+        letter-spacing: 6px;
+    }
+
+    .hero-features {
+        flex-wrap: wrap;
+    }
+
+    .intro-section,
+    .story-section,
+    .about-section {
+        padding: 50px 20px;
+    }
+
+    .map-options {
+        flex-direction: column;
+    }
+
+    .speed-buttons {
+        gap: 8px;
+    }
+
+    .speed-btn {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 28px;
+        letter-spacing: 4px;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        letter-spacing: 6px;
+    }
+
+    .game-area {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .speed-control {
+        padding: 15px;
+    }
+
+    .speed-btn {
+        padding: 7px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+/* ============= 莲境三关 & 档案系统 ============= */
+
+/* 关卡显示项 */
+.level-item {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(34, 197, 94, 0.05));
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 12px;
+}
+
+.level-item .value {
+    background: linear-gradient(135deg, #86efac, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+/* 关卡过渡动画 */
+.level-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(22, 101, 52, 0.85));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    animation: levelFadeIn 0.5s ease-out;
+}
+
+@keyframes levelFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.level-transition.fade-out {
+    animation: levelFadeOut 0.5s ease-out forwards;
+}
+
+@keyframes levelFadeOut {
+    to {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+.level-content {
+    text-align: center;
+    animation: levelPopIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes levelPopIn {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.level-name {
+    font-family: "ZCOOL XiaoWei";
+    font-size: 3rem;
+    background: linear-gradient(135deg, #f0fdf4, #86efac, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.5));
+}
+
+.level-desc {
+    font-size: 1.3rem;
+    color: #94a3b8;
+    font-family: "Noto Serif SC";
+}
+
+.level-hint {
+    margin-top: 25px;
+    font-size: 1rem;
+    color: #86efac;
+    font-family: "ZCOOL XiaoWei";
+    opacity: 0.8;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* 廉洁档案页面 */
+.archive-section {
+    padding: 80px 40px;
+    background: linear-gradient(180deg, #0a1628 0%, #0f1f1d 50%, #0a1628 100%);
+}
+
+.archive-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.archive-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 30px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 25px 20px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 16px;
+    border: 1px solid rgba(74, 222, 128, 0.15);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(74, 222, 128, 0.4);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    font-family: "ZCOOL XiaoWei";
+    background: linear-gradient(135deg, #86efac, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    color: #94a3b8;
+    font-size: 1rem;
+}
+
+.risk-profile {
+    padding: 30px;
+}
+
+.risk-pattern {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.risk-label {
+    color: #94a3b8;
+    margin-right: 10px;
+}
+
+.risk-name {
+    font-size: 1.8rem;
+    font-family: "ZCOOL XiaoWei";
+    font-weight: 700;
+    background: linear-gradient(135deg, #86efac, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.risk-stats p {
+    color: #cbd5e1;
+    margin: 8px 0;
+}
+
+.risk-comment {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(74, 222, 128, 0.05);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 12px;
+}
+
+/* ============= 廉洁素养评估系统 ============= */
+
+/* 玩家信息 */
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.report-header .player-info h3 {
+    margin: 0;
+    color: #4ade80;
+    font-size: 1.4rem;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.report-header .player-info p {
+    margin: 5px 0 0;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.report-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* 图表容器 */
+.chart-container {
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(74, 222, 128, 0.1);
+}
+
+/* 维度卡片网格 */
+.dimensions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.dimension-card {
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(74, 222, 128, 0.1);
+    transition: all 0.3s ease;
+}
+
+.dimension-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(74, 222, 128, 0.4);
+}
+
+.dimension-card.knowledge { border-left: 3px solid #4ade80; }
+.dimension-card.intuition { border-left: 3px solid #fbbf24; }
+.dimension-card.decision { border-left: 3px solid #8b5cf6; }
+.dimension-card.semantic { border-left: 3px solid #22d3ee; }
+.dimension-card.risk { border-left: 3px solid #ef4444; }
+
+.dimension-icon {
+    font-size: 2rem;
+}
+
+.dimension-info {
+    flex: 1;
+}
+
+.dimension-info h5 {
+    margin: 0 0 8px;
+    color: #e2e8f0;
+    font-size: 0.9rem;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.score-bar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4ade80, #22d3ee);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.score-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4ade80;
+}
+
+/* 成长建议 */
+.suggestions-section {
+    margin-top: 25px;
+}
+
+.suggestions-section h4 {
+    color: #e2e8f0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.suggestions-list li {
+    padding: 12px 15px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: #cbd5e1;
+    border-left: 3px solid #fbbf24;
+}
+
+/* 教师仪表盘 */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.dashboard-stats .stat-card {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(30, 41, 59, 0.8));
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.dashboard-stats .stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4ade80;
+    margin-bottom: 8px;
+}
+
+.dashboard-stats .stat-label {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.dashboard-section h4 {
+    color: #e2e8f0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-family: "ZCOOL XiaoWei";
+}
+
+/* 排行榜 */
+.leaderboard {
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid rgba(74, 222, 128, 0.1);
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.leaderboard-item:hover {
+    background: rgba(74, 222, 128, 0.05);
+}
+
+/* 暂停遮罩 */
+.pause-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    border-radius: 16px;
+}
+
+.pause-content {
+    text-align: center;
+    padding: 40px 60px;
+}
+
+.pause-content h2 {
+    color: #fbbf24;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.pause-content p {
+    color: #94a3b8;
+    margin-bottom: 25px;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    color: #1e293b !important;
+    border-color: #f59e0b !important;
+}
+
+.leaderboard-item .rank {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #94a3b8;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.leaderboard-item .rank.top {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1e293b;
+}
+
+.leaderboard-item .name {
+    flex: 1;
+    color: #e2e8f0;
+}
+
+.leaderboard-item .score {
+    color: #4ade80;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.leaderboard-item .games {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+/* 用户画像分析 */
+.profile-section {
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.profile-section h4 {
+    color: #c4b5fd;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-level {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.profile-level .level-label {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.profile-level .level-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fbbf24;
+    margin-left: 10px;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.profile-summary {
+    margin-top: 15px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.profile-summary ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.profile-summary li {
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 难度选择器 */
+.difficulty-selector {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.difficulty-btn {
+    padding: 20px 30px;
+    border: 2px solid rgba(74, 222, 128, 0.3);
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-width: 140px;
+}
+
+.difficulty-btn:hover {
+    border-color: rgba(74, 222, 128, 0.6);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(74, 222, 128, 0.2);
+}
+
+.difficulty-btn.easy {
+    border-color: rgba(74, 222, 128, 0.5);
+}
+
+.difficulty-btn.medium {
+    border-color: rgba(251, 191, 36, 0.5);
+}
+
+.difficulty-btn.hard {
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.difficulty-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.difficulty-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #e2e8f0;
+    margin-bottom: 5px;
+}
+
+.difficulty-info {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+/* 记忆游戏样式 */
+.memory-game-stats {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.memory-game-grid {
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.memory-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-back {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 197, 94, 0.1));
+    border: 2px solid rgba(74, 222, 128, 0.3);
+}
+
+.card-icon {
+    color: #4ade80;
+    font-size: 2rem;
+}
+
+.memory-card.clean .card-front {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.3), rgba(34, 197, 94, 0.2));
+    color: #4ade80;
+    border: 2px solid rgba(74, 222, 128, 0.5);
+}
+
+.memory-card.corrupt .card-front {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.2));
+    color: #ef4444;
+    border: 2px solid rgba(239, 68, 68, 0.5);
+}
+
+.card-front {
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.card-word {
+    font-family: "ZCOOL XiaoWei";
+}
+
+/* 连连看游戏样式 */
+.link-game-stats {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.link-game-grid {
+    display: grid;
+    gap: 5px;
+    padding: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.link-tile {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.link-tile.clean {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.3), rgba(34, 197, 94, 0.2));
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.5);
+}
+
+.link-tile.corrupt {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.2));
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+.link-tile.empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.link-tile.selected {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+    border-color: rgba(168, 85, 247, 1) !important;
+}
+
+.link-tile.matched {
+    animation: matchPop 0.3s ease-out;
+}
+
+.link-tile.error {
+    animation: errorShake 0.5s ease-out;
+}
+
+@keyframes matchPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); opacity: 0.5; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.link-tile.neutral {
+    background: linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(100, 116, 139, 0.1));
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.link-tile.hint {
+    animation: hintPulse 1s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
+        border-color: rgba(250, 204, 21, 0.5);
+    }
+    50% { 
+        box-shadow: 0 0 25px rgba(250, 204, 21, 0.8);
+        border-color: rgba(250, 204, 21, 1);
+    }
+}
+
+.link-tile.clean.matched {
+    animation: cleanPop 0.4s ease-out forwards;
+}
+
+.link-tile.corrupt.matched {
+    animation: corruptPop 0.4s ease-out forwards;
+}
+
+@keyframes cleanPop {
+    0% { 
+        transform: scale(1); 
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.15); 
+        opacity: 0.7;
+        box-shadow: 0 0 30px rgba(74, 222, 128, 0.8);
+    }
+    100% { 
+        transform: scale(0) translateY(-20px); 
+        opacity: 0;
+    }
+}
+
+@keyframes corruptPop {
+    0% { 
+        transform: scale(1); 
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.15); 
+        opacity: 0.7;
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.8);
+    }
+    100% { 
+        transform: scale(0) translateY(20px); 
+        opacity: 0;
+    }
+}
+
+.training-visualizer, .model-comparator, .confusion-matrix {
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(45, 138, 110, 0.2);
+}
+
+.training-visualizer .viz-header, .model-comparator h4, .confusion-matrix h4 {
+    color: #fbbf24;
+    margin-bottom: 12px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.training-visualizer .viz-content {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.training-visualizer .viz-chart {
+    flex: 1;
+    min-width: 300px;
+}
+
+.training-visualizer .viz-chart canvas {
+    background: #1e293b;
+    border-radius: 8px;
+}
+
+.training-visualizer .viz-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 8px;
+}
+
+.training-visualizer .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.training-visualizer .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.training-visualizer .legend-name {
+    color: #94a3b8;
+}
+
+.training-visualizer .viz-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.training-visualizer .metric-card {
+    background: rgba(15, 23, 42, 0.5);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.training-visualizer .metric-name {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 4px;
+}
+
+.training-visualizer .metric-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #10b981;
+}
+
+.training-visualizer .metric-label {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.model-comparator .comparison-chart {
+    margin-bottom: 16px;
+}
+
+.model-comparator .comparison-chart canvas {
+    background: #1e293b;
+    border-radius: 8px;
+    display: block;
+    max-width: 100%;
+}
+
+.model-comparator .comparison-table {
+    overflow-x: auto;
+}
+
+.model-comparator table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.model-comparator th, .model-comparator td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(45, 138, 110, 0.1);
+}
+
+.model-comparator th {
+    color: #fbbf24;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.model-comparator td {
+    color: #e2e8f0;
+    font-size: 12px;
+}
+
+.model-comparator .model-color {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 8px;
+}
+
+.confusion-matrix .matrix-grid {
+    display: grid;
+    gap: 8px;
+    padding: 10px;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.confusion-matrix .matrix-cell {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.confusion-matrix .matrix-cell.header {
+    background: rgba(45, 138, 110, 0.2);
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.viz-btn {
+    background: rgba(45, 138, 110, 0.2);
+    border: 1px solid rgba(45, 138, 110, 0.3);
+    color: #10b981;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.viz-btn:hover {
+    background: rgba(45, 138, 110, 0.3);
+    border-color: rgba(45, 138, 110, 0.5);
+}
+
+.combo-effect {
+    display: inline-block;
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    color: #fbbf24;
+    margin-left: 10px;
+}
+
+.combo-effect.active {
+    animation: comboFlash 1.5s ease-out;
+}
+
+@keyframes comboFlash {
+    0% { 
+        opacity: 0; 
+        transform: scale(0.5);
+    }
+    20% { 
+        opacity: 1; 
+        transform: scale(1.3);
+    }
+    40% { 
+        transform: scale(1);
+    }
+    100% { 
+        opacity: 0; 
+    }
+}
+
+.link-game-hint {
+    text-align: center;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    background: rgba(51, 65, 85, 0.5);
+    border-radius: 8px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    min-height: 24px;
+}
+
+.difficulty-rules {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.tile-word {
+    font-family: "ZCOOL XiaoWei";
+}
+
+/* 游戏结果样式 */
+.game-result {
+    text-align: center;
+}
+
+.result-score {
+    margin-bottom: 20px;
+}
+
+.score-value {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #4ade80;
+    display: block;
+}
+
+.score-label {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.result-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e2e8f0;
+    display: block;
+}
+
+.stat-label {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.result-analysis {
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.result-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* 学生列表 */
+.students-list {
+    margin-top: 25px;
+}
+
+.students-list h4 {
+    color: #e2e8f0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.students-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+.student-card {
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid rgba(74, 222, 128, 0.1);
+    transition: all 0.3s ease;
+}
+
+.student-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(74, 222, 128, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.student-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4ade80, #22d3ee);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 1.5rem;
+    color: #1e293b;
+    font-weight: bold;
+}
+
+.student-name {
+    color: #e2e8f0;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.student-score {
+    color: #4ade80;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.student-games {
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+/* 空状态 */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.empty-state .subtext {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    color: #475569;
+}
+
+/* 雷达图区域 */
+.radar-section,
+.trend-section {
+    margin-bottom: 25px;
+}
+
+.radar-section h4,
+.trend-section h4 {
+    color: #e2e8f0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-family: "ZCOOL XiaoWei";
+}
+
+/* 教师入口按钮 */
+.teacher-entry-btn {
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #a78bfa;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.9rem;
+}
+
+.teacher-entry-btn:hover {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+}
+
+/* 登录/注册样式 */
+.auth-btn {
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    color: #4ade80;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+.auth-btn:hover {
+    background: rgba(74, 222, 128, 0.2);
+    border-color: rgba(74, 222, 128, 0.5);
+}
+
+.user-info {
+    color: #4ade80;
+    font-family: "ZCOOL XiaoWei";
+    margin-right: 10px;
+    padding: 8px 16px;
+    background: rgba(74, 222, 128, 0.1);
+    border-radius: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #e2e8f0;
+    margin-bottom: 8px;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4ade80;
+}
+
+.auth-links {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 20px;
+    color: #64748b;
+    font-size: 12px;
+    text-align: center;
+}
+
+.auth-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* 学习路径样式 */
+.path-intro {
+    margin-bottom: 20px;
+    color: #94a3b8;
+}
+
+.path-intro p {
+    margin: 0;
+}
+
+.learning-path {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.path-item {
+    display: flex;
+    gap: 15px;
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid rgba(74, 222, 128, 0.1);
+}
+
+.path-day {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #4ade80, #22d3ee);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1e293b;
+    font-weight: bold;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.path-content h4 {
+    margin: 0 0 8px;
+    color: #4ade80;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.path-content p {
+    margin: 0 0 8px;
+    color: #e2e8f0;
+    font-size: 14px;
+}
+
+.path-content .tip {
+    color: #fbbf24;
+    font-size: 13px;
+}
+
+.path-summary {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(74, 222, 128, 0.2);
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* AI导师对话样式 */
+.ai-mentor-section {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.ai-mentor-section h4 {
+    color: #e2e8f0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-family: "ZCOOL XiaoWei";
+}
+
+.mentor-chat {
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border: 1px solid rgba(74, 222, 128, 0.1);
+}
+
+.mentor-message {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.user-message {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.mentor-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.mentor-bubble {
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 15px;
+    padding: 12px 16px;
+    max-width: 70%;
+}
+
+.user-bubble {
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 15px;
+    padding: 12px 16px;
+    max-width: 70%;
+}
+
+.mentor-bubble p,
+.user-bubble p {
+    margin: 0;
+    color: #e2e8f0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.user-bubble p {
+    color: #e2e8f0;
+}
+
+.mentor-input {
+    display: flex;
+    gap: 10px;
+}
+
+.mentor-input input {
+    flex: 1;
+    padding: 12px 16px;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 25px;
+    color: #e2e8f0;
+    font-size: 14px;
+}
+
+.mentor-input input:focus {
+    outline: none;
+    border-color: #4ade80;
+}
+
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 8px 0;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 1024px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dimensions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .report-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .path-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+.achievements-section {
+    padding: 30px;
+}
+
+.achievements-section h3 {
+    color: #e2e8f0;
+    font-family: "ZCOOL XiaoWei";
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.achievement-badge {
+    padding: 20px;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.achievement-badge:hover {
+    transform: translateY(-5px);
+    border-color: rgba(74, 222, 128, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.achievement-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.4));
+}
+
+.achievement-name {
+    color: #e2e8f0;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.achievement-desc {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.no-achievements {
+    grid-column: 1/-1;
+    text-align: center;
+    color: #64748b;
+    padding: 30px;
+}
+
+.recent-games {
+    padding: 30px;
+}
+
+.recent-games h3 {
+    color: #e2e8f0;
+    font-family: "ZCOOL XiaoWei";
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+.recent-table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+.recent-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Noto Serif SC";
+}
+
+.recent-table thead {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(22, 101, 52, 0.05));
+}
+
+.recent-table th {
+    padding: 15px 12px;
+    text-align: left;
+    color: #86efac;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.recent-table td {
+    padding: 12px;
+    color: #cbd5e1;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.15);
+}
+
+.recent-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.recent-table tbody tr:hover {
+    background: rgba(30, 41, 59, 0.6);
+}
+
+.recent-table tbody tr.danger-row {
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.empty-table {
+    text-align: center;
+    color: #64748b;
+    padding: 40px;
+}
+
+.speed-label {
+    color: #e2e8f0;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.speed-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+
+.speed-btn {
+    padding: 6px 10px;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    background: rgba(30, 41, 59, 0.6);
+    color: #cbd5e1;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: "ZCOOL XiaoWei";
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.speed-btn:hover {
+    border-color: rgba(74, 222, 128, 0.6);
+    background: rgba(5, 150, 105, 0.2);
+}
+
+.speed-btn.active {
+    border-color: var(--jade);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.4), rgba(34, 197, 94, 0.2));
+    color: var(--jade-light);
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+}
+
+.speed-display {
+    color: #94a3b8;
+    font-size: 0.7rem;
+    margin-top: 3px;
+    font-family: "Noto Serif SC";
+}

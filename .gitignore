@@ -1,0 +1,20 @@
+node_modules/
+.env
+.DS_Store
+*.log
+.vscode/
+.vercel/
+
+# 排除包含敏感信息的后端文件
+backend/doubao_api_server.py
+backend/ml_api_server.py
+backend/models/
+backend/utils/
+
+# 排除API目录（包含API密钥配置）
+api/
+
+# 排除日志和临时文件
+*.pyc
+__pycache__/
+*.db
