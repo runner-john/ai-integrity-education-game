@@ -98,41 +98,6 @@ cd backend
 python doubao_api_server.py
 ```
 
-## GitHub 提交指南
-
-### 📤 提交项目到 GitHub
-
-项目已配置 `.gitignore` 文件，自动排除以下敏感文件：
-
-```
-# 已排除的文件
-backend/doubao_api_server.py    # 包含 API Key 的服务器文件
-backend/ml_api_server.py        # 机器学习 API 服务器
-backend/models/                 # Python ML 模型
-backend/utils/                  # 工具函数
-api/                            # Vercel API 路由
-.env                            # 环境变量
-```
-
-### ✅ 提交步骤
-
-```bash
-# 1. 初始化 git 仓库（首次）
-git init
-
-# 2. 添加远程仓库
-git remote add origin https://github.com/your-username/your-repo-name.git
-
-# 3. 添加所有文件（会自动排除 .gitignore 中的内容）
-git add .
-
-# 4. 提交
-git commit -m "feat: 清莲引 - AI驱动廉洁素养实训系统"
-
-# 5. 推送到 GitHub
-git push -u origin main
-```
-
 ### 🔑 API Key 配置（部署后）
 
 1. **获取 API Key**：在 [豆包开放平台](https://www.doubao.com/) 注册并获取
